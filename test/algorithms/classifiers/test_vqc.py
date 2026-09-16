@@ -89,7 +89,9 @@ class TestVQC(QiskitMachineLearningTestCase):
             "binary": _create_dataset(6, 2),
             "multiclass": _create_dataset(10, 3),
             "no_one_hot": _create_dataset(6, 2, one_hot=False),
-            "runtime_sampler": SamplerV2(mode=self.session, options={"default_shots": 10000}),
+            "runtime_sampler": SamplerV2(mode=self.session,
+                                         options={"default_shots": 10000,
+                                                  "simulator": {"seed_simulator": 123}}),
             "QMLSampler": Sampler(),
         }
 
