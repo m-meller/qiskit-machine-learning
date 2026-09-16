@@ -94,8 +94,7 @@ class TestVQC(QiskitMachineLearningTestCase):
             "binary": _create_dataset(6, 2),
             "multiclass": _create_dataset(10, 3),
             "no_one_hot": _create_dataset(6, 2, one_hot=False),
-            "runtime_sampler": SamplerV2(mode=self.session,
-                                         options=sampler_opts),
+            "runtime_sampler": SamplerV2(mode=self.session, options=sampler_opts),
             "QMLSampler": Sampler(),
         }
 
