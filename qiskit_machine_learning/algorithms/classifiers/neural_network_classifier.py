@@ -19,7 +19,7 @@ from typing import Callable, cast
 import numpy as np
 import scipy.sparse
 from scipy.sparse import spmatrix
-from sklearn.base import ClassifierMixin
+from sklearn.base import ClassifierMixin, BaseEstimator
 from sklearn.exceptions import NotFittedError
 from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 from sklearn.utils.validation import check_is_fitted
@@ -37,7 +37,7 @@ from ...neural_networks import NeuralNetwork
 from ...utils.loss_functions import Loss
 
 
-class NeuralNetworkClassifier(TrainableModel, ClassifierMixin):
+class NeuralNetworkClassifier(TrainableModel, ClassifierMixin, BaseEstimator):
     """Implements a basic quantum neural network classifier. Implements Scikit-Learn compatible
     methods for classification and extends ``ClassifierMixin``.
     See `Scikit-Learn <https://scikit-learn.org>`__ for more details.

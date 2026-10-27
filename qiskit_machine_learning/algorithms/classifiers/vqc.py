@@ -125,18 +125,20 @@ class VQC(NeuralNetworkClassifier):
         self._ansatz = ansatz
         self._num_qubits = num_qubits
         self._circuit = QuantumCircuit(self._num_qubits)
-        self._circuit.compose(self.feature_map, inplace=True)
+        self._circuit.compose(self._feature_map, inplace=True)
         self._circuit.compose(self.ansatz, inplace=True)
 
+        self._pass_manager = pass_manager
         if pass_manager:
             self._circuit.measure_all()
             self._circuit = pass_manager.run(self._circuit)
 
+        self._sampler = sampler
         neural_network = SamplerQNN(
             sampler=sampler,
             circuit=self._circuit,
-            input_params=self.feature_map.parameters,
-            weight_params=self.ansatz.parameters,
+            input_params=self._feature_map.parameters,
+            weight_params=self._ansatz.parameters,
             interpret=self.interpret,
             output_shape=self.output_shape,
             input_gradients=False,
@@ -171,7 +173,16 @@ class VQC(NeuralNetworkClassifier):
     @property
     def num_qubits(self) -> int:
         """Returns the number of qubits used by ansatz and feature map."""
-        return self.circuit.num_qubits
+        return self._circuit.num_qubits
+
+    @property
+    def pass_manager(self) -> BasePassManager | None:
+        return self._pass_manager
+
+    @property
+    def sampler(self) -> BaseSamplerV2 | None:
+        return self._sampler
+
 
     def _fit_internal(self, X: np.ndarray, y: np.ndarray) -> OptimizerResult:
         """
