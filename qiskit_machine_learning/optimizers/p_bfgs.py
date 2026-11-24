@@ -18,8 +18,9 @@ from __future__ import annotations
 import logging
 import multiprocessing
 import platform
+import sys
 from collections.abc import Callable
-from typing import SupportsFloat
+from typing import SupportsFloat, Any
 
 import numpy as np
 
@@ -128,7 +129,13 @@ class P_BFGS(SciPyOptimizer):  # pylint: disable=invalid-name
                 "For Windows, using only current process. Multiple core use not supported."
             )
 
-        queue: multiprocessing.queues.Queue[tuple[POINT, float, int]] = multiprocessing.Queue()
+        mp: Any = (
+            multiprocessing.get_context("fork")
+            if platform.system() == "Linux" and sys.version_info >= (3, 14)
+            else multiprocessing
+        )
+
+        queue: multiprocessing.queues.Queue[tuple[POINT, float, int]] = mp.Queue()
 
         # TODO: are automatic bounds a good idea? What if the circuit parameters are not
         # just from plain Pauli rotations but have a coefficient?
@@ -148,7 +155,7 @@ class P_BFGS(SciPyOptimizer):  # pylint: disable=invalid-name
         processes = []
         for _ in range(num_procs):
             i_pt = algorithm_globals.random.uniform(low, high)  # Another random point in bounds
-            proc = multiprocessing.Process(target=optimize_runner, args=(queue, i_pt))
+            proc = mp.Process(target=optimize_runner, args=(queue, i_pt))
             processes.append(proc)
             proc.start()
 
