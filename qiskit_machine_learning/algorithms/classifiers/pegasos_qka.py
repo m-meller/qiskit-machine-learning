@@ -43,9 +43,7 @@ class PegasosQKA(PegasosQSVC):
 
     def __init__(
         self,
-        quantum_kernel: (
-            TrainableFidelityQuantumKernel | TrainableFidelityStatevectorKernel | None
-        ) = None,
+        quantum_kernel: TrainableFidelityQuantumKernel | TrainableFidelityStatevectorKernel,
         C: float = 1.0,
         num_steps: int = 1000,
         seed: int | None = None,
@@ -73,7 +71,7 @@ class PegasosQKA(PegasosQSVC):
                 )
 
         self._quantum_kernel: (
-            TrainableFidelityQuantumKernel | TrainableFidelityStatevectorKernel | None
+            TrainableFidelityQuantumKernel | TrainableFidelityStatevectorKernel
         ) = quantum_kernel
         self._support_thetas: dict[int, list[np.ndarray]] = {}
         self._left_theta = self._theta.copy()

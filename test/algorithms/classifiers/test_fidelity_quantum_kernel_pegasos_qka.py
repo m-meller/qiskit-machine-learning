@@ -30,7 +30,6 @@ from sklearn.preprocessing import MinMaxScaler
 from qiskit_machine_learning.utils import algorithm_globals
 from qiskit_machine_learning.algorithms import PegasosQKA
 from qiskit_machine_learning.kernels import TrainableFidelityQuantumKernel
-from qiskit_machine_learning import QiskitMachineLearningError
 from qiskit_machine_learning.state_fidelities import ComputeUncompute
 
 
@@ -89,10 +88,6 @@ class TestPegasosQKA(QiskitMachineLearningTestCase):
 
     def test_constructor(self):
         """Tests properties of PegasosQKA"""
-        with self.subTest("Default parameters"):
-            with self.assertRaises(QiskitMachineLearningError):
-                pegasos_qka = PegasosQKA()
-
         with self.subTest("Default initial thetas"):
             pegasos_qka = PegasosQKA(
                 quantum_kernel=self.qkernel,
